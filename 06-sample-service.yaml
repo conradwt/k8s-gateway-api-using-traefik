@@ -1,0 +1,105 @@
+<<<<<<< HEAD
+=======
+# TODO rewrite for our defined service.
+>>>>>>> origin/main
+# Service to reach the application on the cluster
+apiVersion: v1
+kind: Service
+metadata:
+<<<<<<< HEAD
+  name: whoami
+  namespace: whoami
+  labels:
+    app: whoami
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      name: whoami
+  selector:
+    app: whoami
+---
+# Application to expose
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: whoami
+  namespace: whoami
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami
+=======
+  labels:
+    app: echo
+  name: echo
+spec:
+  ports:
+    - port: 1025
+      name: tcp
+      protocol: TCP
+      targetPort: 1025
+    - port: 1026
+      name: udp
+      protocol: TCP
+      targetPort: 1026
+    - port: 1027
+      name: http
+      protocol: TCP
+      targetPort: 1027
+  selector:
+    app: echo
+---
+# Application to expose
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: echo
+  name: echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+        - image: kong/go-echo:latest
+          name: echo
+          ports:
+            - containerPort: 1025
+            - containerPort: 1026
+            - containerPort: 1027
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          resources: {}
+>>>>>>> origin/main

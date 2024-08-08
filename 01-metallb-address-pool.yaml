@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: demo-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    # replace the following IP address range
+    - 192.168.58.100-192.168.58.110

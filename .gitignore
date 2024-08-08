@@ -1,0 +1,6 @@
+# Exclude VSCode artifacts
+.metals/
+.vscode/
+
+# Ignore files
+01-metallb-address-pool.yaml
