@@ -2,8 +2,6 @@
 
 The purpose of this example is to provide instructions for running the K8s Gatewey API using Traefik.
 
-The purpose of this example is to provide instructions for running the K8s Gatewey API using Kong.
-
 ## Software Requirements
 
 - Helm v3.15.2 or newer
