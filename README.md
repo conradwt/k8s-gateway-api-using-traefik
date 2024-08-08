@@ -18,7 +18,6 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
 ## Tutorial Installation
 
 1.  clone github repository
-<<<<<<< HEAD
 
     ```zsh
     git clone https://github.com/conradwt/k8s-gateway-api-using-traefik.git
@@ -31,36 +30,30 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     ```
 
 3.  create Minikube cluster
-=======
->>>>>>> origin/main
 
     ```zsh
     minikube start -p gateway-api-traefik
     ```
 
-<<<<<<< HEAD
 4.  install MetalLB
-=======
-2.  change directory
->>>>>>> origin/main
 
     ```zsh
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
     ```
 
-3.  create Minikube cluster
+5.  create Minikube cluster
 
     ```zsh
     minikube start -p gateway-api-kong
     ```
 
-4.  install MetalLB
+6.  install MetalLB
 
     ```zsh
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
     ```
 
-5.  locate the subnet
+7.  locate the subnet
 
     ```zsh
     docker network inspect gateway-api-traefik | jq '.[0].IPAM.Config[0]["Subnet"]'
@@ -78,13 +71,13 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     194.1.2.100-194.1.2.110
     ```
 
-6.  create the `01-metallb-address-pool.yaml`
+8.  create the `01-metallb-address-pool.yaml`
 
     ```zsh
     cp 01-metallb-address-pool.yaml.example 01-metallb-address-pool.yaml
     ```
 
-7.  update the `01-metallb-address-pool.yaml`
+9.  update the `01-metallb-address-pool.yaml`
 
     ```yaml
     apiVersion: metallb.io/v1beta1
@@ -97,37 +90,33 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
         - 194.1.2.100-194.1.2.110
     ```
 
-<<<<<<< HEAD
     Note: The IP range needs to be in the same range as the K8s cluster, `gateway-api-traefik`.
-=======
-    Note: The IP range needs to be in the same range as the K8s cluster, `gateway-api-kong`.
->>>>>>> origin/main
 
-8.  apply the address pool manifest
+10. apply the address pool manifest
 
     ```zsh
     kubectl apply -f 01-metallb-address-pool.yaml
     ```
 
-9.  apply Layer 2 advertisement manifest
+11. apply Layer 2 advertisement manifest
 
     ```zsh
     kubectl apply -f 02-metallb-advertise.yaml
     ```
 
-10. apply deployment manifest
+12. apply deployment manifest
 
     ```zsh
     kubectl apply -f 03-nginx-deployment.yaml
     ```
 
-11. apply service manifest
+13. apply service manifest
 
     ```zsh
     kubectl apply -f 04-nginx-service-loadbalancer.yaml
     ```
 
-12. check that your service has an IP address
+14. check that your service has an IP address
 
     ```zsh
     kubectl get svc nginx-service
@@ -140,7 +129,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     nginx-service   LoadBalancer   10.106.207.172   194.1.2.100   80:32000/TCP   17h
     ```
 
-13. test connectivity to `nginx-service` endpoint via external IP address
+15. test connectivity to `nginx-service` endpoint via external IP address
 
     ```zsh
     curl 194.1.2.100
@@ -174,27 +163,19 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     </html>
     ```
 
-14. install the Gateway API CRDs
+16. install the Gateway API CRDs
 
     ```zsh
-<<<<<<< HEAD
     kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/experimental-install.yaml
-=======
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
->>>>>>> origin/main
     ```
 
-15. install/update Traefik RBAC
+17. install/update Traefik RBAC
 
     ```zsh
-<<<<<<< HEAD
     kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.1/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
-=======
-    kubectl apply -f 05-gateway.yaml
->>>>>>> origin/main
     ```
 
-16. create the Gateway and GatewayClass resources
+18. create the Gateway and GatewayClass resources
 
     ```zsh
     helm repo add traefik https://traefik.github.io/charts
@@ -203,25 +184,14 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     helm upgrade --install --namespace traefik traefik traefik/traefik -f 05-values.yaml
     ```
 
-17. populate $PROXY_IP for future commands:
+19. populate $PROXY_IP for future commands:
 
     ```zsh
     export PROXY_IP=$(kubectl get svc --namespace traefik traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo $PROXY_IP
     ```
 
-<<<<<<< HEAD
-18. verify the proxy IP
-=======
-18. populate $PROXY_IP for future commands:
-
-    ```zsh
-    export PROXY_IP=$(kubectl get svc --namespace kong kong-gateway-proxy -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo $PROXY_IP
-    ```
-
-19. verify the proxy IP
->>>>>>> origin/main
+20. verify the proxy IP
 
     ```zsh
     curl -i $PROXY_IP
@@ -240,27 +210,16 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     {"message":"no Route matched with those values"}
     ```
 
-<<<<<<< HEAD
-19. deploy the X service
-=======
-20. deploy the X service
->>>>>>> origin/main
+21. deploy the X service
 
     # TODO rewrite for our defined service.
 
     ```zsh
-<<<<<<< HEAD
     kubectl create namespace whoami
     kubectl apply -f 06-sample-service.yaml
     ```
 
-20. create HTTPRoute for our deployed service
-=======
-    kubectl apply -f 06-sample-service.yaml
-    ```
-
-21. create HTTPRoute for our deployed service
->>>>>>> origin/main
+22. create HTTPRoute for our deployed service
 
     # TODO rewrite for our defined service.
 
@@ -268,26 +227,17 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     kubectl apply -f 07-sample-httproute.yaml
     ```
 
-<<<<<<< HEAD
-21. test the routing rule
-=======
-22. test the routing rule
->>>>>>> origin/main
+23. test the routing rule
 
     # TODO rewrite for our defined service.
 
     ```zsh
-<<<<<<< HEAD
     curl $PROXY_IP
-=======
-    curl -i $PROXY_IP/echo
->>>>>>> origin/main
     ```
 
     The results should look like this:
 
     ```text
-<<<<<<< HEAD
     Hostname: whoami-98d7579fb-qq2sj
     IP: 127.0.0.1
     IP: ::1
@@ -305,29 +255,8 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     X-Forwarded-Proto: http
     X-Forwarded-Server: traefik-7c7587b647-vdmgt
     X-Real-Ip: 194.1.2.3
-=======
-    HTTP/1.1 200 OK
-    Content-Type: text/plain; charset=utf-8
-    Content-Length: 140
-    Connection: keep-alive
-    Date: Fri, 21 Apr 2023 12:24:55 GMT
-    X-Kong-Upstream-Latency: 0
-    X-Kong-Proxy-Latency: 1
-    Via: kong/3.2.2
-
-    Welcome, you are connected to node docker-desktop.
-    Running on Pod echo-7f87468b8c-tzzv6.
-    In namespace default.
-    With IP address 10.1.0.237.
-    ...
->>>>>>> origin/main
     ```
 
 ## References
 
-<<<<<<< HEAD
 - https://traefik.io/blog/getting-started-with-kubernetes-gateway-api-and-traefik
-=======
-- https://docs.konghq.com/kubernetes-ingress-controller/3.2.x/get-started
-- https://github.com/Kong/go-echo
->>>>>>> origin/main
