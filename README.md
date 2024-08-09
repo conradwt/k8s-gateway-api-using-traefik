@@ -39,19 +39,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
     ```
 
-5.  create Minikube cluster
-
-    ```zsh
-    minikube start -p gateway-api-kong
-    ```
-
-6.  install MetalLB
-
-    ```zsh
-    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
-    ```
-
-7.  locate the subnet
+5.  locate the K8s cluster's subnet
 
     ```zsh
     docker network inspect gateway-api-traefik | jq '.[0].IPAM.Config[0]["Subnet"]'
@@ -69,13 +57,13 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     194.1.2.100-194.1.2.110
     ```
 
-8.  create the `01-metallb-address-pool.yaml`
+6.  create the `01-metallb-address-pool.yaml`
 
     ```zsh
     cp 01-metallb-address-pool.yaml.example 01-metallb-address-pool.yaml
     ```
 
-9.  update the `01-metallb-address-pool.yaml`
+7.  update the `01-metallb-address-pool.yaml`
 
     ```yaml
     apiVersion: metallb.io/v1beta1
@@ -90,31 +78,31 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
 
     Note: The IP range needs to be in the same range as the K8s cluster, `gateway-api-traefik`.
 
-10. apply the address pool manifest
+8.  apply the address pool manifest
 
     ```zsh
     kubectl apply -f 01-metallb-address-pool.yaml
     ```
 
-11. apply Layer 2 advertisement manifest
+9.  apply Layer 2 advertisement manifest
 
     ```zsh
     kubectl apply -f 02-metallb-advertise.yaml
     ```
 
-12. apply deployment manifest
+10. apply deployment manifest
 
     ```zsh
     kubectl apply -f 03-nginx-deployment.yaml
     ```
 
-13. apply service manifest
+11. apply service manifest
 
     ```zsh
     kubectl apply -f 04-nginx-service-loadbalancer.yaml
     ```
 
-14. check that your service has an IP address
+12. check that your service has an IP address
 
     ```zsh
     kubectl get svc nginx-service
@@ -127,7 +115,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     nginx-service   LoadBalancer   10.106.207.172   194.1.2.100   80:32000/TCP   17h
     ```
 
-15. test connectivity to `nginx-service` endpoint via external IP address
+13. test connectivity to `nginx-service` endpoint via external IP address
 
     ```zsh
     curl 194.1.2.100
@@ -161,19 +149,19 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     </html>
     ```
 
-16. install the Gateway API CRDs
+14. install the Gateway API CRDs
 
     ```zsh
     kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/experimental-install.yaml
     ```
 
-17. install/update Traefik RBAC
+15. install/update Traefik RBAC
 
     ```zsh
     kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.1/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
     ```
 
-18. create the Gateway and GatewayClass resources
+16. create the Gateway and GatewayClass resources
 
     ```zsh
     helm repo add traefik https://traefik.github.io/charts
@@ -182,14 +170,14 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     helm upgrade --install --namespace traefik traefik traefik/traefik -f 05-values.yaml
     ```
 
-19. populate $PROXY_IP for future commands:
+17. populate $PROXY_IP for future commands:
 
     ```zsh
     export PROXY_IP=$(kubectl get svc --namespace traefik traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo $PROXY_IP
     ```
 
-20. verify the proxy IP
+18. verify the proxy IP
 
     ```zsh
     curl -i $PROXY_IP
@@ -208,7 +196,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     {"message":"no Route matched with those values"}
     ```
 
-21. deploy the X service
+19. deploy the X service
 
     # TODO rewrite for our defined service.
 
@@ -217,7 +205,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     kubectl apply -f 06-sample-service.yaml
     ```
 
-22. create HTTPRoute for our deployed service
+20. create HTTPRoute for our deployed service
 
     # TODO rewrite for our defined service.
 
@@ -225,7 +213,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     kubectl apply -f 07-sample-httproute.yaml
     ```
 
-23. test the routing rule
+21. test the routing rule
 
     # TODO rewrite for our defined service.
 
