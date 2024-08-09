@@ -167,7 +167,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     helm repo add traefik https://traefik.github.io/charts
     helm repo update
     kubectl create namespace traefik
-    helm upgrade --install --namespace traefik traefik traefik/traefik -f 05-values.yaml
+    helm upgrade --install --namespace traefik traefik traefik/traefik -f values.yaml
     ```
 
 17. populate $PROXY_IP for future commands:
