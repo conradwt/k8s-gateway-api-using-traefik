@@ -57,7 +57,7 @@ because it doesn't expose Linux VM IP addresses to the host OS (i.e. macOS).
     194.1.2.100-194.1.2.110
     ```
 
-6.  create the `01-metallb-address-pool.yaml`
+6.  create the `01-metallb-address-pool.yaml` file
 
     ```zsh
     cp 01-metallb-address-pool.yaml.example 01-metallb-address-pool.yaml
